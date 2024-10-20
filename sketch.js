@@ -82,6 +82,8 @@ let catcherSpeed = 0;
 let wait = 250;
 let timeUntilPlay, loadTime;
 let fallen = false;
+let test = "test";
+let myInput;
 let myArray = [
 	{color1: 'deeppink', color2: 'darkorchid', color3: 'magenta'},
 	{color1: 'pink', color2: 'orchid', color3: 'mag'}
@@ -351,19 +353,7 @@ function draw() {
     }
 
 	if (screen == 3) {
-        fetchHighScores()
-            .then(result => {
-                console.log(result)
-                console.log(result[1]['initals'])
 
-                // let hi = result[1]['id']
-                log(result[1]['initals'])
-            
-            })
-        function log(x) {
-            // document.write(x)
-            text(x, 150, 200);
-        }
 		catcher.x = 500;
 		fallingObject.y = -500;
 		badFallingObject.x = -500;
@@ -379,6 +369,33 @@ function draw() {
 		stroke(highScoreColor);
 		strokeWeight(2);
 		text("Leaderboard" , 200, 70);
+
+        fetchHighScores()
+        .then(result => {
+            console.log(result)
+            console.log(result[1]['initals'])
+
+            // let hi = result[1]['id']
+            // log(result[1]['initals'])
+            window.initals2 = result[1]['initals']
+            window.initals3 = result[2]['initals']
+            window.initals4 = result[3]['initals']
+            window.initals5 = result[4]['initals']
+            window.initals6 = result[5]['initals']
+
+            window.score2 = result[1]['score']
+            window.score3 = result[2]['score']
+            window.score4 = result[3]['score']
+            window.score5 = result[4]['score']
+            window.score6 = result[5]['score']
+            // text(result[1]['initals'], 150, 200);
+        
+        })
+        function log(x) {
+            // document.write(x)
+            // text(x, 150, 200);
+            // window.value = x
+        }
 		
 		text("1", 50, 150);
 		text("2", 50, 200);
@@ -393,17 +410,30 @@ function draw() {
 		fill(highScoreColor);
 		strokeWeight(0);
 		text("LSD", 150, 150);
+        text(window.initals2, 150, 200);
 		// text("AAA", 150, 200);
-		text("BBB", 150, 250);
-		text("CCC", 150, 300);
-		text("DDD", 150, 350);
+        text(window.initals3, 150, 250);
+		// text("BBB", 150, 250);
+        text(window.initals4, 150, 300);
+		// text("CCC", 150, 300);
+        text(window.initals5, 150, 350);
+		// text("DDD", 150, 350);
 		
 		fill(textColor);
 		text("1000000", 300, 150);
-		text("0000000", 300, 200);
-		text("0000000", 300, 250);
-		text("0000000", 300, 300);
-		text("0000000", 300, 350);
+        text(window.score2, 300, 200);
+		// text("0000000", 300, 200);
+        text(window.score3, 300, 250);
+		// text("0000000", 300, 250);
+        text(window.score4, 300, 300);
+		// text("0000000", 300, 300);
+        text(window.score5, 300, 350);
+        myInput = createInput('AAA');
+        myInput.position(0, 400);
+        myInput.size(394, 50)
+        let msg = myInput.value();
+        text(msg, 200, 375);
+		// text("0000000", 300, 350);
 		// print(data);
 		// highScores = fetchHighScores();
 		// console.log(highScores);

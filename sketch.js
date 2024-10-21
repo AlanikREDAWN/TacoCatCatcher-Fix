@@ -64,10 +64,17 @@ async function fetchHighScores() {
 	return High_Scores;
 	// return High_Scores_String;
 }
+async function addHighScores(inits, hs) {
+    const { error } = await _supabase
+        .from('High_Scores')
+        .insert({ initals: inits, score: hs })
+  
+}
 /* VARIABLES */
 //sprites
 let catcher, fallingObject, badFallingObject;
 let playButton, directionsButton, backButton, viewLeaderboard, restartButton;
+let smallrestartButton;
 //ints
 let score = 0;
 let buttonsShown = false;
@@ -77,6 +84,7 @@ var time;
 let newHighScore = false;
 let lives = 3;
 let level = 1;
+let msg;
 let fallingObjectSpeed = 0;
 let catcherSpeed = 0;
 let wait = 250;
@@ -84,6 +92,7 @@ let timeUntilPlay, loadTime;
 let fallen = false;
 let test = "test";
 let myInput;
+let aPressed = false;
 let myArray = [
 	{color1: 'deeppink', color2: 'darkorchid', color3: 'magenta'},
 	{color1: 'pink', color2: 'orchid', color3: 'mag'}
@@ -372,8 +381,8 @@ function draw() {
 
         fetchHighScores()
         .then(result => {
-            console.log(result)
-            console.log(result[1]['initals'])
+            // console.log(result)
+            // console.log(result[1]['initals'])
 
             // let hi = result[1]['id']
             // log(result[1]['initals'])
@@ -397,6 +406,9 @@ function draw() {
             // window.value = x
         }
 		
+        smallrestartButton.x = 370;
+        smallrestartButton.y = 370;
+
 		text("1", 50, 150);
 		text("2", 50, 200);
 		text("3", 50, 250);
@@ -428,11 +440,44 @@ function draw() {
         text(window.score4, 300, 300);
 		// text("0000000", 300, 300);
         text(window.score5, 300, 350);
-        myInput = createInput('AAA');
-        myInput.position(0, 400);
-        myInput.size(394, 50)
-        let msg = myInput.value();
-        text(msg, 200, 375);
+        textSize(14)
+        text("Click to play again", 100, 370)
+        text("Press 'a' to add your high score", 145, 390)
+        if (aPressed == true) {
+
+            msg = myInput.value();
+            text(msg, 200, 375);
+        }
+        if (smallrestartButton.mouse.pressed()) {
+            console.log("restarting")
+            score = 0;
+            lives = 3;
+            level = 1;
+            fallingObjectSpeed = 0;
+            catcherSpeed = 0;
+            newHighScore = false;
+            catcher.x = 200;
+            catcher.y = 370;
+            fallingObject.y = 0;
+            fallingObject.x = random(width);
+            fallingObject.vel.y = 2;
+            fallingObject.direction = 'down';
+            badFallingObject.y = 0;
+            badFallingObject.x = random(width);
+            badFallingObject.color = color(0,128,128);
+            badFallingObject.vel.y = 2;
+            badFallingObject.direction = 'down';
+            background(bgColor);
+            smallrestartButton.x = 1000;
+            smallrestartButton.y = 1000;
+            screen = 2;
+        }
+        // myInput = createInput('AAA');
+        // myInput.position(0, 400);
+        // myInput.size(394, 50)
+        // let msg = myInput.value();
+        // text(msg, 200, 375);
+
 		// text("0000000", 300, 350);
 		// print(data);
 		// highScores = fetchHighScores();
@@ -488,9 +533,12 @@ function restart() {
 	  	badFallingObject.vel.y = 2;
 	  	badFallingObject.direction = 'down';
 		background(bgColor);
+        screen = 2;
+        buttonsShown = false;
 	} else if (viewLeaderboard.mouse.pressed()) {
 		// restartButton.color = rebeccaPurple;
 		screen = 3;
+        buttonsShown = false;
 
 
 
@@ -569,6 +617,19 @@ function homeScreen() {
 
 	viewLeaderboard.x = 1000;
 	viewLeaderboard.y = 1000;
+
+    smallrestartButton = new Sprite(width/2 + 100, height/2 - 100, 110, 70, 'k');
+    smallrestartButton.width = 50;
+    smallrestartButton.height = 50;
+	smallrestartButton.color = textColor;
+	smallrestartButton.text = "Restart";
+	smallrestartButton.textSize = 10;
+	smallrestartButton.textColor = highScoreColor;
+	smallrestartButton.stroke = highScoreColor;
+	smallrestartButton.strokeWeight = 3;
+
+    smallrestartButton.x = 1000;
+	smallrestartButton.y = 1000;
 }
 
 function directionsScreen() {
@@ -650,6 +711,27 @@ function checkLevel() {
 }
 
 function mousePressed() {
-	  console.log(`I am here at ${mouseX}:${mouseY}`);
+	console.log(`I am here at ${mouseX}:${mouseY}`);
+    if (screen == 3) {
+
+    }
 	// addHighScores("LSD", 10);
+}
+
+function keyPressed() {
+    if (screen == 3) {
+        if (key === 'a') {
+            aPressed = true;
+            print("the screen is 3 and 'a' has been pressed")
+            text("Press the enter key to register", 200, 400)
+            myInput = createInput('AAA');
+            myInput.position(0, 400);
+            myInput.size(394, 50)
+        }
+        if (keyCode === ENTER) {
+            if (aPressed == true) {
+                addHighScores(msg, highScore);
+            }
+        }
+    }
 }

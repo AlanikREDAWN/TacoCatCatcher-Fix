@@ -22,7 +22,7 @@ This game was started in the 2024 Girls Who Code SIP (Summer Immersion Program),
 - [x] Add level progression
 - [x] Add high score functionality
 - [ ] Add bonus item
-- [ ] Add leaderboard
+- [x] Add leaderboard
 ### Debugging
 - [x] Figure out system error
 - [x] Fix collider bug
